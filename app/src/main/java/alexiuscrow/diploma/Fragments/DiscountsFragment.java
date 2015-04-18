@@ -42,7 +42,7 @@ public class DiscountsFragment extends Fragment {
                 false);
         SimpleAdapter sAdapter = getDiscountItmAdapter(inflater, img, title, deadline, shops);
         // определяем список и присваиваем ему адаптер
-        lvSimple = (ListView) rootView.findViewById(R.id.lvSimple);
+        lvSimple = (ListView) rootView.findViewById(R.id.lvDiscounts);
         lvSimple.setAdapter(sAdapter);
 
         return rootView;

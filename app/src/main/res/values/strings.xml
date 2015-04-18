@@ -6,7 +6,7 @@
 
     <string name="action_example">Example action</string>
 
-    <string name="action_search">Search</string>
+    <string name="action_add">Додати</string>
 
     <string name="discounts_title">Акції</string>
     <string name="shops_title">Магазини</string>

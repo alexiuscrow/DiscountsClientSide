@@ -1,24 +1,20 @@
 package alexiuscrow.diploma.Activities;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 
-import alexiuscrow.diploma.Fragments.CategoriesFragment;
-import alexiuscrow.diploma.Fragments.DiscountsFragment;
-import alexiuscrow.diploma.Fragments.FavoritesFragment;
+import alexiuscrow.diploma.Fragments.FragmentsFactory;
 import alexiuscrow.diploma.Fragments.NavigationDrawerFragment;
-import alexiuscrow.diploma.Fragments.SettingsFragment;
-import alexiuscrow.diploma.Fragments.ShopsFragment;
 import alexiuscrow.diploma.R;
 
 
@@ -64,23 +60,23 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.discounts_title);
-                fragment = new DiscountsFragment();
+                fragment = FragmentsFactory.getInstance().getDiscountsFragment();
                 break;
             case 2:
                 mTitle = getString(R.string.shops_title);
-                fragment = new ShopsFragment();
+                fragment = FragmentsFactory.getInstance().getShopsFragment();
                 break;
             case 3:
                 mTitle = getString(R.string.categories_title);
-                fragment = new CategoriesFragment();
+                fragment = FragmentsFactory.getInstance().getCategoriesFragment();
                 break;
             case 4:
                 mTitle = getString(R.string.favorites_title);
-                fragment = new FavoritesFragment();
+                fragment = FragmentsFactory.getInstance().getFavoritesFragment();
                 break;
             case 5:
                 mTitle = getString(R.string.settings_title);
-                fragment = new SettingsFragment();
+                fragment = FragmentsFactory.getInstance().getSettingsFragment();
                 break;
         }
 

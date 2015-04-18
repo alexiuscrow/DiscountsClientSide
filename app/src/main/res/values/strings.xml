@@ -19,4 +19,9 @@
 
     <string name="default_screen">Default screen</string>
     <string name="nearest_title">Шукати поблизу</string>
+
+
+    <string name="item_discount_title">Назва акційної пропозиції</string>
+    <string name="item_deadline_title">Дата закінчення</string>
+    <string name="item_shop_title">Назва магазину</string>
 </resources>

@@ -8,28 +8,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/nearest_title"
-        android:id="@+id/sw_nearest_r"
+        android:id="@+id/sw_disc_nearest_r"
         android:singleLine="false"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp" />
+        android:paddingBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Staff list"
-        android:layout_gravity="center_horizontal">
-    </TextView>
-    <ScrollView
+    <ListView
+        android:id="@+id/lvSimple"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scroll">
-        <LinearLayout
-            android:id="@+id/linLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent">
+    </ListView>
 
 </LinearLayout>
 

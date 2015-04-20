@@ -4,9 +4,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
-
     <string name="action_add">Додати</string>
+    <string name="action_refresh">Оновити</string>
 
     <string name="discounts_title">Акції</string>
     <string name="shops_title">Магазини</string>
@@ -15,8 +14,6 @@
     <string name="settings_title">Параметри</string>
     <string name="title_activity_shops">ShopsActivity</string>
 
-    <string name="hello_world">Hello world!</string>
-
     <string name="default_screen">Default screen</string>
     <string name="nearest_title">Шукати поблизу</string>
 
@@ -24,4 +21,12 @@
     <string name="item_discount_title">Назва акційної пропозиції</string>
     <string name="item_deadline_title">Дата закінчення</string>
     <string name="item_shop_title">Назва магазину</string>
+
+    <string name="item_shop_name">Назва магазину</string>
+    <string name="item_address_title">Адреса</string>
+
+    <string name="settings_radius_title">Радіус пошуку "найближчих"</string>
+    <string name="settings_radius_desc">Вкажіть радіус, в межах якого буде виконуватись пошук найближчих магазинів та акцій</string>
+    <string name="settings_radius_value_title">Радіус:</string>
+    <string name="settings_radius_unit">м</string>
 </resources>

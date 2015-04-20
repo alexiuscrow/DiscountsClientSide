@@ -1,4 +1,4 @@
-package alexiuscrow.diploma.Fragments;
+package alexiuscrow.diploma.fragments;
 
 /**
  * Created by Alexiuscrow on 18.04.2015.

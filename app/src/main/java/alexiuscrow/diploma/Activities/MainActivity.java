@@ -1,4 +1,4 @@
-package alexiuscrow.diploma.Activities;
+package alexiuscrow.diploma.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import alexiuscrow.diploma.Fragments.FragmentsFactory;
-import alexiuscrow.diploma.Fragments.NavigationDrawerFragment;
 import alexiuscrow.diploma.R;
+import alexiuscrow.diploma.fragments.FragmentsFactory;
+import alexiuscrow.diploma.fragments.NavigationDrawerFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,7 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.discounts, menu);
+//            getMenuInflater().inflate(R.menu.test, menu);
             restoreActionBar();
             return true;
         }
@@ -164,4 +165,13 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    public boolean onPrepareOptionsMenu (Menu menu){
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
+//            MenuItem item = (MenuItem) menu.findItem(R.id.action_add);
+//            item.setVisible(false);
+            menu.setGroupVisible(R.id.disc_menu_group, false);
+            menu.setGroupVisible(R.id.shops_menu_group, false);
+        }
+        return true;
+    }
 }

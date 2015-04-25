@@ -56,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sbRadius"
-            android:max="1000" />
+            android:max="1000"
+            android:progress="200" />
     </LinearLayout>
 
 </LinearLayout>

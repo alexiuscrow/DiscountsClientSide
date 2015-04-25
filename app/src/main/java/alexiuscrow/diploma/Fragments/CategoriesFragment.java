@@ -2,6 +2,7 @@ package alexiuscrow.diploma.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import alexiuscrow.diploma.R;
+import alexiuscrow.diploma.Settings;
 
 /**
  * Created by Alexiuscrow on 17.04.2015.
  */
 public class CategoriesFragment extends Fragment{
-    String[] names = { "Дитячы товари", "Їжа", "Одяг"};
+//    Resources res = getActivity().getApplicationContext().getResources();
+//    String[] names = res.getStringArray(R.array.categories_array);
+    String[] names = {"Авто", "Дитячі продукти", "Їжа", "Ігри", "Книги", "Електронні товари",
+        "Краса та здоровя", "Мода", "Взуття", "Одяг", "Спорт", "Для дому", "Продукти для тварин",
+        "Сервіси", "Подарунки та квіти", };
 
     View rootView;
     ListView lvContainer;
@@ -31,7 +37,7 @@ public class CategoriesFragment extends Fragment{
                 android.R.layout.simple_list_item_1, names);
 
         lvContainer.setAdapter(adapter);
-
+        Log.d(Settings.MAIN_APP_TAG, names.toString());
         return rootView;
     }
 

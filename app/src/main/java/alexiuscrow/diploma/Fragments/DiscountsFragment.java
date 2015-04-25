@@ -80,9 +80,9 @@ public class DiscountsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        new RefreshLocalTasks().execute();
+        new RefreshLocalTasks().execute(51.522256, 31.229335);
+//        new RefreshLocalTasks().execute();
         setRetainInstance(true);
-        startNewAsyncTask();
         setHasOptionsMenu(true);
         getActivity().invalidateOptionsMenu();
         super.onCreate(savedInstanceState);
@@ -277,20 +277,14 @@ public class DiscountsFragment extends Fragment {
         swNearR = (Switch) rootView.findViewById(R.id.sw_disc_nearest_r);
     }
 
-    private void startNewAsyncTask() {
-        RefreshLocalTasks asyncTask = new RefreshLocalTasks();
-        asyncTask.execute();
-    }
-
-    class RefreshLocalTasks extends AsyncTask<Void, Void, List<Shops>> {
+    class RefreshLocalTasks extends AsyncTask<Double, Void, List<Shops>> {
 
         @Override
-        protected List<Shops> doInBackground(Void... latlng) {
-//        Log.d(Settings.MAIN_APP_TAG, "doInBackground");
+        protected List<Shops> doInBackground(Double... latlng) {
             List<Shops> lShops = null;
-//        if (latlng.length == 2){
+        if (latlng.length == 2){
             try {
-                String url = "http://192.168.0.102:8080/app/api/v1/shops/discounts?lat=51.522256&lng=31.229335";
+                String url = Settings.getLocalityShopsURL(latlng[0], latlng[1]);
                 String json = readUrl(url);
                 GsonBuilder builder = new GsonBuilder();
                 builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -300,10 +294,10 @@ public class DiscountsFragment extends Fragment {
             catch (Exception e){}
 
 //            writeImagesToSD(lShops);
-//        }
-//        else{
-//            Log.d(Settings.MAIN_APP_TAG, "Не вірна кількість параметрів передана в 'execute()'" + Environment.getExternalStorageState());
-//        }
+        }
+        else{
+            Log.d(Settings.MAIN_APP_TAG, "Не вірна кількість параметрів передана в 'execute()': " + latlng.length);
+        }
             return lShops;
         }
 

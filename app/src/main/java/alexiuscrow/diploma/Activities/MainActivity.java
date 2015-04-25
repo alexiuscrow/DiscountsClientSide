@@ -13,6 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import alexiuscrow.diploma.R;
 import alexiuscrow.diploma.fragments.FragmentsFactory;
 import alexiuscrow.diploma.fragments.NavigationDrawerFragment;
@@ -34,6 +39,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        intImageLoader();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -118,9 +124,9 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add) {
-            return true;
-        }
+//        if (id == R.id.action_add) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -167,11 +173,27 @@ public class MainActivity extends ActionBarActivity
 
     public boolean onPrepareOptionsMenu (Menu menu){
         if (mNavigationDrawerFragment.isDrawerOpen()) {
-//            MenuItem item = (MenuItem) menu.findItem(R.id.action_add);
-//            item.setVisible(false);
             menu.setGroupVisible(R.id.disc_menu_group, false);
             menu.setGroupVisible(R.id.shops_menu_group, false);
+            menu.setGroupVisible(R.id.new_disc_menu_group, false);
         }
         return true;
+    }
+
+    private void intImageLoader(){
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_action_image)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .defaultDisplayImageOptions(defaultOptions)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .diskCacheSize(30 * 1024 * 1024)
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .build();
+
+        ImageLoader.getInstance().init(config);
     }
 }

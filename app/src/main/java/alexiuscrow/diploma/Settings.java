@@ -15,4 +15,8 @@ public class Settings {
         return "http://"+IP+":"+PORT+"/app/api/v"+API_V+"/shops/discounts?lat="+
                 String.valueOf(lat)+"&lng="+String.valueOf(lng);
     }
+
+    public static String getNearestShopsURL(Double lat, Double lng, Double radius){
+        return getLocalityShopsURL(lat, lng) + "&radius=" + String.valueOf(radius);
+    }
 }

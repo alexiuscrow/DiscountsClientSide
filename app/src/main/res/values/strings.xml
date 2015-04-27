@@ -37,4 +37,11 @@
     <string name="new_disc_shop_title">Назва магазину</string>
     <string name="new_disc_send_btn">Відправити</string>
     <string name="title_activity_new_discount">Нова акція</string>
+    <string name="title_activity_full_discount_info">FullDiscountInfoActivity</string>
+
+    <string name="full_disc_info_title">FullDiscountInfoActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_map">MapActivity</string>
 </resources>

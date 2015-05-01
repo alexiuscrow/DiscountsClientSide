@@ -18,6 +18,10 @@ public class SearchCriteria {
         this.radius = radius;
     }
 
+    public SearchCriteria(Double lat, Double lng, Integer radius) {
+        this(lat, lng, radius.doubleValue());
+    }
+
     public SearchCriteria(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
@@ -28,6 +32,10 @@ public class SearchCriteria {
         this.lng = lng;
         this.mode = mode;
         this.radius = radius;
+    }
+
+    public SearchCriteria(Double lat, Double lng, TravelMode mode, Integer radius) {
+        this(lat, lng, mode, radius.doubleValue());
     }
 
     public SearchCriteria(Double lat, Double lng, TravelMode mode) {

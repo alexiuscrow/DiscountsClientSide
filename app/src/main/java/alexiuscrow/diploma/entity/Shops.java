@@ -1,10 +1,11 @@
 package alexiuscrow.diploma.entity;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
 
-public class Shops {
+public class Shops implements Comparable<Shops>{
     protected Integer id;
     protected String name;
     protected Categories category;
@@ -111,5 +112,8 @@ public class Shops {
                         address, distance, discounts);
     }
 
-
+    @Override
+    public int compareTo(Shops another) {
+        return this.distance.compareTo(another.getDistance());
+    }
 }

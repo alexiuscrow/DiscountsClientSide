@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
@@ -25,6 +26,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +48,9 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     View rootView;
     Switch swNearR;
     ListView lvContainer;
-    List<Shops> lShops = null;
+    List<Shops> lShops = new ArrayList<Shops>();
     LayoutInflater inflater = null;
+    SimpleAdapter sAdapter = null;
 
     public DiscountsFragment() {
     }
@@ -54,15 +58,22 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        initializeVariables(inflater, container);
         this.inflater = inflater;
+        initializeVariables(inflater, container);
         swNearR.setChecked(Settings.getDiscSwitchStatus(getActivity()));
+//        lvContainer.setAdapter(sAdapter);
+        if (Settings.getDiscSwitchStatus(getActivity())) {
+            new RefreshShopsTask(this).execute(new SearchCriteria(51.522256, 31.229335,
+                    Settings.getNearestRadius(getActivity())));
+        }
+        else {
+            new RefreshShopsTask(this).execute(new SearchCriteria(51.522256, 31.229335));
+        }
         return rootView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        new RefreshShopsTask(this).execute(new SearchCriteria(51.522256, 31.229335));
         setRetainInstance(true);
         setHasOptionsMenu(true);
         getActivity().invalidateOptionsMenu();
@@ -146,7 +157,11 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
 
             ArrayList<Map<String, Object>> data = new ArrayList<Map<String, Object>>(
                     lShops.size());
-            Map<String, Object> m;
+            Map<String, Object> m = new HashMap<String, Object>();
+
+            if (Settings.getDiscSwitchStatus(getActivity())){
+                Collections.sort(lShops);
+            }
 
             for (Shops shop : lShops) {
                 for (Discounts discount : shop.getDiscounts()) {
@@ -187,6 +202,7 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     public void onTaskCompleted(List<Shops> lShops) {
         this.lShops = lShops;
         lvContainer.setAdapter(getDiscountItmAdapter(this.lShops));
+//        sAdapter.notifyDataSetChanged();
     }
 
     private static Bitmap readFileSD(String fileName) {
@@ -227,7 +243,8 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
                     Log.d("IMG", "Изображение НЕ установлено (data == null)");
                     return true;
                 } else {
-                    ImageLoader.getInstance().displayImage("http://192.168.0.102:8080/app/api/v1/images/" + (String) data, (ImageView) view);
+                    ImageLoader.getInstance().displayImage("http://" + Settings.IP + ":" + Settings.PORT + "/app/" +
+                            "api/v" + Settings.API_V + "/images/" + (String) data, (ImageView) view);
 //                    Bitmap image = readFileSD((String)data);
 //                    if (image != null){
 //                        ((ImageView)view).setImageBitmap(image);
@@ -248,6 +265,7 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     private void initializeVariables(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_discounts, container, false);
         lvContainer = (ListView) rootView.findViewById(R.id.lvDiscounts);
+//        sAdapter = getDiscountItmAdapter(this.lShops);
         swNearR = (Switch) rootView.findViewById(R.id.sw_disc_nearest_r);
         lvContainer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -259,8 +277,9 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
         swNearR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //TODO something else
+                lShops.clear();
                 Settings.setDiscSwitchStatus(isChecked);
+
             }
         });
     }

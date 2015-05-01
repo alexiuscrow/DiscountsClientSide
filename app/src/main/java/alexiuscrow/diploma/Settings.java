@@ -9,15 +9,15 @@ import alexiuscrow.diploma.util.geo.TravelMode;
  * Created by Alexiuscrow on 21.04.2015.
  */
 public class Settings {
-    public static final transient String MAIN_APP_TAG = "DISCOUNTAPP";
-    public static final transient String DIR_SD = "DiscForMe";
+    public static final String MAIN_APP_TAG = "DISCOUNTAPP";
+    public static final String DIR_SD = "DiscForMe";
 
-    public static final transient String IP = "192.168.0.101";
-    public static final transient String PORT = "8080";
-    public static final transient String API_V = "1";
+    public static final String IP = "192.168.0.101";
+    public static final String PORT = "8080";
+    public static final String API_V = "1";
 
-    private static transient SharedPreferences preferences = null;
-    private static transient SharedPreferences.Editor prefEdit = null;
+    private static SharedPreferences preferences = null;
+    private static SharedPreferences.Editor prefEdit = null;
 
     private static final String NEAREST_RADIUS_KEY = "NEAREST_RADIUS";
     private static final String NEAREST_SWITCH_DISC_KEY = "NEAREST_SWITCH_DISC";
@@ -25,29 +25,29 @@ public class Settings {
     private static final String NEAREST_SWITCH_CATEG_KEY = "NEAREST_SWITCH_CATEG";
     private static final String TRAVEL_MODE_KEY = "TRAVEL_MODE";
 
-    private static transient Integer nearestRadius = null;
-    private static transient Boolean nearestSwitchDisc = null;
-    private static transient Boolean nearestSwitchShops = null;
-    private static transient Boolean nearestSwitchCateg = null;
-    private static transient TravelMode travelMode = null;
+    private static Integer nearestRadius = null;
+    private static Boolean nearestSwitchDisc = null;
+    private static Boolean nearestSwitchShops = null;
+    private static Boolean nearestSwitchCateg = null;
+    private static TravelMode travelMode = null;
 
     private Settings(){}
 
-    public static String getLocalityShopsURL(Double lat, Double lng){
+    public static synchronized String getLocalityShopsURL(Double lat, Double lng){
         return "http://"+IP+":"+PORT+"/app/api/v"+API_V+"/shops/discounts?lat="+
                 String.valueOf(lat)+"&lng="+String.valueOf(lng);
     }
 
-    public static String getNearestShopsURL(Double lat, Double lng, Double radius){
+    public static synchronized String getNearestShopsURL(Double lat, Double lng, Double radius){
         return getLocalityShopsURL(lat, lng) + "&radius=" + String.valueOf(radius);
     }
 
-    public static void initializePreferences(Context context){
+    public static synchronized void initializePreferences(Context context){
         preferences = context.getSharedPreferences(DIR_SD, Context.MODE_PRIVATE);
         if (prefEdit == null) prefEdit = preferences.edit();
     }
 
-    public static Integer getNearestRadius(Context context){
+    public static synchronized Integer getNearestRadius(Context context){
         if (nearestRadius == null){
             initializePreferences(context);
             Integer defValue = 200;
@@ -56,7 +56,7 @@ public class Settings {
         return nearestRadius;
     }
 
-    public static TravelMode getTravelMode(Context context){
+    public static synchronized TravelMode getTravelMode(Context context){
         if (travelMode == null){
             initializePreferences(context);
             String defValue = "driving";
@@ -74,7 +74,7 @@ public class Settings {
         return travelMode;
     }
 
-    public static Boolean getDiscSwitchStatus(Context context){
+    public static synchronized Boolean getDiscSwitchStatus(Context context){
         if (nearestSwitchDisc == null){
             initializePreferences(context);
             boolean defValue = false;
@@ -86,7 +86,7 @@ public class Settings {
         return nearestSwitchDisc;
     }
 
-    public static Boolean getShopsSwitchStatus(Context context){
+    public static synchronized Boolean getShopsSwitchStatus(Context context){
         if (nearestSwitchShops == null){
             initializePreferences(context);
             boolean defValue = false;
@@ -98,7 +98,7 @@ public class Settings {
         return nearestSwitchShops;
     }
 
-    public static Boolean getCategSwitchStatus(Context context){
+    public static synchronized Boolean getCategSwitchStatus(Context context){
         if (nearestSwitchCateg == null){
             initializePreferences(context);
             boolean defValue = false;
@@ -110,34 +110,34 @@ public class Settings {
         return nearestSwitchCateg;
     }
 
-    public static void setNearestRadius(Integer nearestRadius){
+    public static synchronized void setNearestRadius(Integer nearestRadius){
         Settings.nearestRadius = nearestRadius;
     }
 
-    public static void setTravelMode(TravelMode travelMode){
+    public static synchronized void setTravelMode(TravelMode travelMode){
         Settings.travelMode = travelMode;
     }
 
-    public static void setDiscSwitchStatus(Boolean status){
+    public static synchronized void setDiscSwitchStatus(Boolean status){
         Settings.nearestSwitchDisc = status;
     }
 
-    public static void setShopsSwitchStatus(Boolean status){
+    public static synchronized void setShopsSwitchStatus(Boolean status){
         Settings.nearestSwitchShops = status;
     }
 
-    public static void setCategSwitchStatus(Boolean status){
+    public static synchronized void setCategSwitchStatus(Boolean status){
         Settings.nearestSwitchCateg = status;
     }
 
-    public static void saveNearestRadius(Integer nearestRadius, Context context){
+    public static synchronized void saveNearestRadius(Integer nearestRadius, Context context){
         setNearestRadius(nearestRadius);
         if (preferences == null) initializePreferences(context);
         prefEdit.putInt(NEAREST_RADIUS_KEY, nearestRadius);
         prefEdit.apply();
     }
 
-    public static void saveTravelMode(TravelMode travelMode, Context context){
+    public static synchronized void saveTravelMode(TravelMode travelMode, Context context){
         setTravelMode(travelMode);
         if (preferences == null) initializePreferences(context);
         switch (travelMode){
@@ -153,28 +153,28 @@ public class Settings {
         prefEdit.apply();
     }
 
-    public static void saveDiscSwitchStatus(Boolean status, Context context){
+    public static synchronized void saveDiscSwitchStatus(Boolean status, Context context){
         setDiscSwitchStatus(status);
         if (preferences == null) initializePreferences(context);
         prefEdit.putBoolean(NEAREST_SWITCH_DISC_KEY, status);
         prefEdit.apply();
     }
 
-    public static void saveShopsSwitchStatus(Boolean status, Context context){
+    public static synchronized void saveShopsSwitchStatus(Boolean status, Context context){
         setShopsSwitchStatus(status);
         if (preferences == null) initializePreferences(context);
         prefEdit.putBoolean(NEAREST_SWITCH_SHOPS_KEY, status);
         prefEdit.apply();
     }
 
-    public static void saveCategSwitchStatus(Boolean status, Context context){
+    public static synchronized void saveCategSwitchStatus(Boolean status, Context context){
         setCategSwitchStatus(status);
         if (preferences == null) initializePreferences(context);
         prefEdit.putBoolean(NEAREST_SWITCH_CATEG_KEY, status);
         prefEdit.apply();
     }
 
-    public static void saveAllToPreferences(Context context){
+    public static synchronized void saveAllToPreferences(Context context){
         if (nearestRadius != null){
             if (preferences == null) initializePreferences(context);
             saveNearestRadius(nearestRadius, context);

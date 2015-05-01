@@ -45,6 +45,7 @@ public class RefreshShopsTask extends AsyncTask<SearchCriteria, Void, List<Shops
                 url = Settings.getNearestShopsURL(criterias[0].getLat(), criterias[0].getLng(), criterias[0].getRadius());
 
             String json = getJsonFromUrl(url);
+            Log.d(Settings.MAIN_APP_TAG, json);
             GsonBuilder builder = new GsonBuilder();
             builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Gson gson = builder.create();
@@ -58,50 +59,6 @@ public class RefreshShopsTask extends AsyncTask<SearchCriteria, Void, List<Shops
     protected void onPostExecute(List<Shops> lShops) {
         super.onPostExecute(lShops);
         listener.onTaskCompleted(lShops);
-    }
-
-    private  void writeImagesToSD(List<Shops> lShops) {
-        if (!Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
-            Log.d(Settings.MAIN_APP_TAG, "SD-карта не доступна: " + Environment.getExternalStorageState());
-            return;
-        }
-
-        File sdPath = Environment.getExternalStorageDirectory();
-        sdPath = new File(sdPath.getAbsolutePath() + "/" + Settings.DIR_SD);
-        sdPath.mkdirs();
-        if (lShops != null) Log.d(Settings.MAIN_APP_TAG, "writeImagesToSD: " + lShops.get(0).toString());
-        else Log.d(Settings.MAIN_APP_TAG, "writeImagesToSD: lShops null");
-        if (lShops != null){
-            for (Shops shop: lShops){
-                for(Discounts discount: shop.getDiscounts()){
-                    if (discount.getImageUrl() != null){
-                        InputStream input;
-                        try {
-                            URL url = new URL ("http://192.168.0.102:8080/app/api/v1/images/" + discount.getImageUrl());
-                            input = url.openStream();
-                            byte[] buffer = new byte[1500];
-                            OutputStream output = new FileOutputStream(sdPath.getAbsolutePath() + "/" + discount.getImageUrl() + ".jpg");
-                            try {
-                                int bytesRead = 0;
-                                while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
-                                    output.write(buffer, 0, bytesRead);
-                                }
-                                Log.d(Settings.MAIN_APP_TAG, "writeImagesToSD: Файл '" + discount.getImageUrl() + ".jpg' записаний на SD");
-                            }
-                            finally {
-                                output.close();
-                                buffer=null;
-                            }
-                        }
-                        catch(Exception e) {
-                            Log.d(Settings.MAIN_APP_TAG, "Помилка при збереженні зображення");
-                        }
-                    }
-                }
-            }
-        }
-        else Log.d(Settings.MAIN_APP_TAG, "lShops null");
     }
 
     private  String getJsonFromUrl(String urlString) throws Exception {

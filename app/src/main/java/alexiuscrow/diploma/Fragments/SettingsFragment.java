@@ -10,16 +10,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import alexiuscrow.diploma.R;
+import alexiuscrow.diploma.Settings;
 
 /**
  * Created by Alexiuscrow on 17.04.2015.
  */
-public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener{
+public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
     View rootView;
     TextView tvRadiusVal;
     SeekBar sbRadius;
 
-    public SettingsFragment(){}
+    public SettingsFragment() {
+    }
 
 
     @Override
@@ -28,7 +30,7 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         initializeVariables(inflater, container);
 
         sbRadius.setOnSeekBarChangeListener(this);
-
+        sbRadius.setProgress(Settings.getNearestRadius(getActivity()));
         return rootView;
     }
 
@@ -44,11 +46,12 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        Settings.setNearestRadius(seekBar.getProgress());
         String disclaimerMsg = getResources().getString(R.string.settings_radius_set_disclaimer);
         Toast.makeText(getActivity().getApplicationContext(), disclaimerMsg, Toast.LENGTH_SHORT).show();
     }
 
-    private void initializeVariables(LayoutInflater inflater, ViewGroup container){
+    private void initializeVariables(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         tvRadiusVal = (TextView) rootView.findViewById(R.id.tvSettRadiusValue);
         sbRadius = (SeekBar) rootView.findViewById(R.id.sbRadius);

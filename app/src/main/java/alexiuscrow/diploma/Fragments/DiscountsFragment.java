@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -29,6 +31,7 @@ import java.util.Map;
 
 import alexiuscrow.diploma.R;
 import alexiuscrow.diploma.Settings;
+import alexiuscrow.diploma.activities.FullDiscountInfoActivity;
 import alexiuscrow.diploma.activities.NewDiscountActivity;
 import alexiuscrow.diploma.entity.Discounts;
 import alexiuscrow.diploma.entity.Shops;
@@ -38,21 +41,22 @@ import alexiuscrow.diploma.tasks.criteria.SearchCriteria;
 /**
  * Created by Alexiuscrow on 17.04.2015.
  */
-public class DiscountsFragment extends Fragment implements RefreshShopsTask.Callback{
+public class DiscountsFragment extends Fragment implements RefreshShopsTask.Callback {
     View rootView;
     Switch swNearR;
     ListView lvContainer;
     List<Shops> lShops = null;
     LayoutInflater inflater = null;
 
-    public DiscountsFragment(){}
+    public DiscountsFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initializeVariables(inflater, container);
-//        new RefreshLocalTasks(inflater, lvContainer).execute("51.522256", "31.229335");
         this.inflater = inflater;
+        swNearR.setChecked(Settings.getDiscSwitchStatus(getActivity()));
         return rootView;
     }
 
@@ -72,8 +76,8 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_add:
                 Intent intent = new Intent(getActivity(), NewDiscountActivity.class);
                 getActivity().startActivity(intent);
@@ -86,7 +90,7 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     }
 
     public SimpleAdapter getDiscountItmAdapter(LayoutInflater inflater, int[] img, String[] title,
-                                                String[] deadline, Double[] distance, String[] shops){
+                                               String[] deadline, Double[] distance, String[] shops) {
         final String ATTRIBUTE_NAME_TITLE = "title";
         final String ATTRIBUTE_NAME_DEADLINE = "deadline";
         final String ATTRIBUTE_NAME_IMAGE = "image";
@@ -102,10 +106,9 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
             m.put(ATTRIBUTE_NAME_IMAGE, img[i]);
             m.put(ATTRIBUTE_NAME_TITLE, title[i]);
             m.put(ATTRIBUTE_NAME_DEADLINE, deadline[i]);
-            if (distance != null){
+            if (distance != null) {
                 m.put(ATTRIBUTE_NAME_DISTANCE, distance[i]);
-            }
-            else{
+            } else {
                 m.put(ATTRIBUTE_NAME_DISTANCE, null);
 
             }
@@ -129,12 +132,12 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
     }
 
     public SimpleAdapter getDiscountItmAdapter(LayoutInflater inflater, int[] img, String[] title,
-                                                String[] deadline, String[] shops){
+                                               String[] deadline, String[] shops) {
         return getDiscountItmAdapter(inflater, img, title, deadline, null, shops);
     }
 
-    public SimpleAdapter getDiscountItmAdapter(List<Shops> lShops){
-        if (lShops != null){
+    public SimpleAdapter getDiscountItmAdapter(List<Shops> lShops) {
+        if (lShops != null) {
             final String ATTRIBUTE_NAME_TITLE = "title";
             final String ATTRIBUTE_NAME_DEADLINE = "deadline";
             final String ATTRIBUTE_NAME_IMAGE = "image";
@@ -145,18 +148,18 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
                     lShops.size());
             Map<String, Object> m;
 
-            for (Shops shop: lShops) {
-                for (Discounts discount: shop.getDiscounts()){
+            for (Shops shop : lShops) {
+                for (Discounts discount : shop.getDiscounts()) {
+                    Log.d(Settings.MAIN_APP_TAG, "---- " + discount.getTitle());
                     m = new HashMap<String, Object>();
-                    if(discount.getImageUrl() != null) {
+                    if (discount.getImageUrl() != null) {
                         m.put(ATTRIBUTE_NAME_IMAGE, discount.getImageUrl());
                     }
                     m.put(ATTRIBUTE_NAME_TITLE, discount.getTitle());
                     m.put(ATTRIBUTE_NAME_DEADLINE, discount.getEndDate());
-                    if (shop.getDistance() != null){
+                    if (shop.getDistance() != null) {
                         m.put(ATTRIBUTE_NAME_DISTANCE, shop.getDistance());
-                    }
-                    else{
+                    } else {
                         m.put(ATTRIBUTE_NAME_DISTANCE, null);
 
                     }
@@ -175,8 +178,7 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
             sAdapter.setViewBinder(new DiscItmViewBinder());
 
             return sAdapter;
-        }
-        else{
+        } else {
             return null;
         }
     }
@@ -199,7 +201,7 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
         sdPath = new File(sdPath.getAbsolutePath() + "/" + Settings.DIR_SD);
         File sdFile = new File(sdPath, fileName + ".jpg");
 
-        if(sdFile.exists()){
+        if (sdFile.exists()) {
             Log.d("IMG", "Изображение найдено");
             return BitmapFactory.decodeFile(sdFile.getAbsolutePath());
         }
@@ -207,28 +209,25 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
         return null;
     }
 
-    class DiscItmViewBinder implements SimpleAdapter.ViewBinder{
+    class DiscItmViewBinder implements SimpleAdapter.ViewBinder {
 
         @Override
         public boolean setViewValue(View view, Object data, String textRepresentation) {
-            if (view.getId() == R.id.tvDiscItemDistance){
-                if(((Double)data) == null){
+            if (view.getId() == R.id.tvDiscItemDistance) {
+                if (((Double) data) == null) {
                     view.setVisibility(View.GONE);
                     return true;
-                }
-                else{
-                    ((TextView)view).setText(((Double)data).toString() + "м");
+                } else {
+                    ((TextView) view).setText(((Double) data).toString() + "м");
                     return true;
                 }
-            }
-            else if (view.getId() == R.id.ivDiscItemPrev){
-                if(((String)data) == null){
+            } else if (view.getId() == R.id.ivDiscItemPrev) {
+                if (((String) data) == null) {
                     view.setVisibility(View.GONE);
                     Log.d("IMG", "Изображение НЕ установлено (data == null)");
                     return true;
-                }
-                else{
-                    ImageLoader.getInstance().displayImage("http://192.168.0.102:8080/app/api/v1/images/" + (String)data, (ImageView)view);
+                } else {
+                    ImageLoader.getInstance().displayImage("http://192.168.0.102:8080/app/api/v1/images/" + (String) data, (ImageView) view);
 //                    Bitmap image = readFileSD((String)data);
 //                    if (image != null){
 //                        ((ImageView)view).setImageBitmap(image);
@@ -246,9 +245,23 @@ public class DiscountsFragment extends Fragment implements RefreshShopsTask.Call
         }
     }
 
-    private void initializeVariables(LayoutInflater inflater, ViewGroup container){
+    private void initializeVariables(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_discounts, container, false);
         lvContainer = (ListView) rootView.findViewById(R.id.lvDiscounts);
         swNearR = (Switch) rootView.findViewById(R.id.sw_disc_nearest_r);
+        lvContainer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), FullDiscountInfoActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+        swNearR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //TODO something else
+                Settings.setDiscSwitchStatus(isChecked);
+            }
+        });
     }
 }

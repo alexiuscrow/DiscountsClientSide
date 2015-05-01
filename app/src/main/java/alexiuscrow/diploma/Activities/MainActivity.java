@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import alexiuscrow.diploma.R;
+import alexiuscrow.diploma.Settings;
 import alexiuscrow.diploma.fragments.FragmentsFactory;
 import alexiuscrow.diploma.fragments.NavigationDrawerFragment;
 
@@ -101,8 +102,6 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
@@ -171,7 +170,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public boolean onPrepareOptionsMenu (Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         if (mNavigationDrawerFragment.isDrawerOpen()) {
             menu.setGroupVisible(R.id.disc_menu_group, false);
             menu.setGroupVisible(R.id.shops_menu_group, false);
@@ -180,7 +179,7 @@ public class MainActivity extends ActionBarActivity
         return true;
     }
 
-    private void intImageLoader(){
+    private void intImageLoader() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.ic_action_image)
                 .cacheInMemory(true)
@@ -196,4 +195,11 @@ public class MainActivity extends ActionBarActivity
 
         ImageLoader.getInstance().init(config);
     }
+
+    @Override
+    protected void onDestroy() {
+        Settings.saveAllToPreferences(this);
+        super.onDestroy();
+    }
+
 }

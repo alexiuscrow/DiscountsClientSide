@@ -1,12 +1,16 @@
 package alexiuscrow.diploma.tasks.criteria;
 
+import alexiuscrow.diploma.util.geo.TravelMode;
+
 /**
  * Created by Alexiuscrow on 25.04.2015.
  */
+
 public class SearchCriteria {
     private Double lat = null;
     private Double lng = null;
     private Double radius = null;
+    private TravelMode mode = null;
 
     public SearchCriteria(Double lat, Double lng, Double radius) {
         this.lat = lat;
@@ -17,6 +21,19 @@ public class SearchCriteria {
     public SearchCriteria(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public SearchCriteria(Double lat, Double lng, TravelMode mode, Double radius) {
+        this.lat = lat;
+        this.lng = lng;
+        this.mode = mode;
+        this.radius = radius;
+    }
+
+    public SearchCriteria(Double lat, Double lng, TravelMode mode) {
+        this.lat = lat;
+        this.lng = lng;
+        this.mode = mode;
     }
 
     public Double getLat() {
@@ -31,23 +48,27 @@ public class SearchCriteria {
         return radius;
     }
 
+    public TravelMode getMode() {
+        return mode;
+    }
+
     public Boolean hasRadius(){
         if (radius != null) return true;
         else return false;
     }
 
+    public Boolean hasMode(){
+        if (mode != null) return true;
+        else return false;
+    }
+
     @Override
     public String toString() {
-        if (radius != null)
-            return "SearchCriteria{" +
-                    "lat=" + lat +
-                    ", lng=" + lng +
-                    ", radius=" + radius +
-                    '}';
-        else
-            return "SearchCriteria{" +
-                    "lat=" + lat +
-                    ", lng=" + lng +
-                    '}';
+        return "SearchCriteria{" +
+                "lat=" + lat +
+                ", lng=" + lng +
+                ", radius=" + radius +
+                ", mode=" + mode +
+                '}';
     }
 }

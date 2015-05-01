@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import alexiuscrow.diploma.Settings;
@@ -47,7 +48,7 @@ public class RefreshShopsTask extends AsyncTask<SearchCriteria, Void, List<Shops
             GsonBuilder builder = new GsonBuilder();
             builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Gson gson = builder.create();
-            lShops = gson.fromJson(json, new TypeToken<List<Shops>>(){}.getType());
+            lShops = gson.fromJson(json, new TypeToken<ArrayList<Shops>>(){}.getType());
         }
         catch (Exception e){}
         return lShops;
